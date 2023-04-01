@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:kabaten_task/modules/users_screen/data/api/users_list_api.dart';
-import 'package:kabaten_task/modules/users_screen/data/models/user_model.dart';
 import 'package:kabaten_task/modules/users_screen/users_sr.dart';
 
 class UsersListController extends ChangeNotifier {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kabaten_task/core/constants/routes.dart';
 import 'package:kabaten_task/modules/auth/screens/signin_signup_screen.dart';
 import 'package:kabaten_task/modules/home_screen/screens/home_page.dart';
 import 'package:kabaten_task/modules/splash_screen/screens/splash.dart';
