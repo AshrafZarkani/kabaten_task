@@ -87,11 +87,11 @@ class SignInSignUpScreen extends StatelessWidget {
             }
           : () async {
               AuthRepository.registerUser(
-                      email: authProv.emailAddress.text,
-                      password: authProv.password.text,
-                      context: context,
-                      authProv: authProv)
-                  .then(
+                email: authProv.emailAddress.text,
+                password: authProv.password.text,
+                context: context,
+                authProv: authProv,
+              ).then(
                 (value) {
                   if (value?.status == "200" || value?.status == "201") {
                     Navigator.pushNamed(
