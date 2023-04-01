@@ -1,0 +1,4 @@
+enum RegistrationEnums {
+  emailAddress,
+  password,
+}
