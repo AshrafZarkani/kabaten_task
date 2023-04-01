@@ -91,9 +91,9 @@ class _ListViewWidgetState extends ConsumerState<ListViewWidget> {
 
   bool _scrollNotification(ScrollNotification scrollInfo) {
     if (!widget._isLoading &&
-        scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
+        scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent &&
+        widget._data.isNotEmpty) {
       widget._isLoading = true;
-
       ref.watch(usersProvider).fetchUsersList();
     }
     return true;

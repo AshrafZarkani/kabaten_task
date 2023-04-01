@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:kabaten_task/core/constants/constants.dart';
 import 'package:kabaten_task/core/services/networking/networking.dart';
 import 'package:kabaten_task/core/services/storage/storage.dart';
+import 'package:kabaten_task/modules/auth/helper/helper.dart';
 
 class ApiBaseHelper {
   String? get baseUrl =>
@@ -26,7 +27,9 @@ class ApiBaseHelper {
     return headers;
   }
 
-  var dio = Dio();
+  var dio = Dio()
+    ..interceptors.add(
+        LogInterceptor(requestBody: true, request: true, requestHeader: true));
 
   Future<dynamic> get(String url,
       {Map<String, dynamic>? queryParameters}) async {
@@ -40,6 +43,7 @@ class ApiBaseHelper {
       return response.data;
     } on DioError catch (err) {
       final errorMessage = DioException.fromDioError(err).toString();
+      GlobalNavigator.showAlertDialog(errorMessage);
       return errorMessage;
     } catch (e) {
       if (kDebugMode) debugPrint(e.toString());
@@ -60,6 +64,7 @@ class ApiBaseHelper {
       return response.data;
     } on DioError catch (err) {
       final errorMessage = DioException.fromDioError(err).toString();
+      GlobalNavigator.showAlertDialog(errorMessage);
       return errorMessage;
     } catch (e) {
       if (kDebugMode) print(e);
@@ -80,6 +85,7 @@ class ApiBaseHelper {
       return response.data;
     } on DioError catch (err) {
       final errorMessage = DioException.fromDioError(err).toString();
+      GlobalNavigator.showAlertDialog(errorMessage);
       return errorMessage;
     } catch (e) {
       if (kDebugMode) print(e);
@@ -100,6 +106,7 @@ class ApiBaseHelper {
       return response.data;
     } on DioError catch (err) {
       final errorMessage = DioException.fromDioError(err).toString();
+      GlobalNavigator.showAlertDialog(errorMessage);
       return errorMessage;
     } catch (e) {
       if (kDebugMode) print(e);
@@ -119,6 +126,7 @@ class ApiBaseHelper {
       return response.data;
     } on DioError catch (err) {
       final errorMessage = DioException.fromDioError(err).toString();
+      GlobalNavigator.showAlertDialog(errorMessage);
       return errorMessage;
     } catch (e) {
       if (kDebugMode) print(e);

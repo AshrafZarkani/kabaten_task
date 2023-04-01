@@ -3,7 +3,6 @@ import 'package:kabaten_task/core/constants/static_strings.dart';
 import 'package:kabaten_task/core/services/storage/secure_storage.dart';
 import 'package:kabaten_task/modules/auth/controller/auth_controller.dart';
 import 'package:kabaten_task/modules/auth/data/data.dart';
-import 'package:kabaten_task/modules/auth/helper/helper.dart';
 
 class AuthRepository {
   static Future<RegisterModel?> registerUser(
@@ -39,7 +38,6 @@ class AuthRepository {
       authProv.setLoading(false);
     } catch (e) {
       authProv.setLoading(false);
-      showMyDialog(e.toString(), context);
       rethrow;
     }
     return null;
@@ -59,24 +57,21 @@ class AuthRepository {
       final res = await AuthApis().login(body);
       if (res != null && (res['status'] == "200" || res['status'] == "201")) {
         RegisterModel loggedInUser = RegisterModel.fromJson(res);
-        if (loggedInUser.status == "200" || loggedInUser.status == "201") {
-          final StorageService storageService = StorageService.instance;
-          final StorageItem newAccessToken = StorageItem(
-              StaticStrings.loginAccessToken,
-              loggedInUser.data?.accessToken.toString() ?? "");
-          final StorageItem newRefreshToken = StorageItem(
-              StaticStrings.refreshToken,
-              loggedInUser.data?.refreshToken.toString() ?? "");
-          await storageService.writeSecureData(newAccessToken);
-          await storageService.writeSecureData(newRefreshToken);
-          authProv.setLoading(false);
-          return loggedInUser;
-        }
+        final StorageService storageService = StorageService.instance;
+        final StorageItem newAccessToken = StorageItem(
+            StaticStrings.loginAccessToken,
+            loggedInUser.data?.accessToken.toString() ?? "");
+        final StorageItem newRefreshToken = StorageItem(
+            StaticStrings.refreshToken,
+            loggedInUser.data?.refreshToken.toString() ?? "");
+        await storageService.writeSecureData(newAccessToken);
+        await storageService.writeSecureData(newRefreshToken);
+        authProv.setLoading(false);
+        return loggedInUser;
       }
       authProv.setLoading(false);
     } catch (e) {
       authProv.setLoading(false);
-      showMyDialog(e.toString(), context);
       rethrow;
     }
     return null;
@@ -96,7 +91,6 @@ class AuthRepository {
       authProv.setLoading(false);
     } catch (e) {
       authProv.setLoading(false);
-      showMyDialog(e.toString(), context);
       rethrow;
     }
     return null;
@@ -109,21 +103,24 @@ class AuthRepository {
           await storageService.readSecureData(StaticStrings.refreshToken);
       if (oldRefreshToken != null) {
         final res = await AuthApis().refreshToken(oldRefreshToken);
-        if (res != null && res['status'] == "201" || res['status'] == "200") {
-          RegisterModel newRegistrationModel = RegisterModel.fromJson(res);
-          final StorageService storageService = StorageService.instance;
-          final StorageItem newAccessToken = StorageItem(
-              StaticStrings.loginAccessToken,
-              newRegistrationModel.data?.accessToken.toString() ?? "");
-          final StorageItem newRefreshToken = StorageItem(
-              StaticStrings.refreshToken,
-              newRegistrationModel.data?.refreshToken.toString() ?? "");
-          await storageService.writeSecureData(newAccessToken);
-          await storageService.writeSecureData(newRefreshToken);
+
+        if (res != null && res is Map<String, dynamic>) {
+          if (res['status'] == "201" || res['status'] == "200") {
+            RegisterModel newRegistrationModel = RegisterModel.fromJson(res);
+            final StorageService storageService = StorageService.instance;
+            await storageService.deleteAllSecureData();
+            final StorageItem newAccessToken = StorageItem(
+                StaticStrings.loginAccessToken,
+                newRegistrationModel.data?.accessToken.toString() ?? "");
+            final StorageItem newRefreshToken = StorageItem(
+                StaticStrings.refreshToken,
+                newRegistrationModel.data?.refreshToken.toString() ?? "");
+            await storageService.writeSecureData(newAccessToken);
+            await storageService.writeSecureData(newRefreshToken);
+          }
         }
       }
     } catch (e) {
-      showMyDialog(e.toString(), context);
       rethrow;
     }
   }

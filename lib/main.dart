@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      key: navigatorKey,
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       title: 'Kabaten',
       theme: ThemeData(
